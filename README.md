@@ -1,16 +1,35 @@
-# book
+List of books with their read status
+<img src=https://github.com/nihal0514/spotifyclone/assets/77735813/43d3c895-ddfd-4605-9403-cae184765c69 width="300" height="600">
 
-A new Flutter project.
+When Search icon is Clicked
+<img src=https://github.com/nihal0514/book/assets/77735813/1ed76153-76b5-4c22-bbf5-9878754625db width="300" height="600">
 
-## Getting Started
+Search bar result
+<img src=https://github.com/nihal0514/book/assets/77735813/3a7b3b42-8722-45ae-a25e-a7984baa06ac width="300" height="600">
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+Libraries used:
+ -GetX  (for state management)
+ -Floor (for sqlite database)
+ -Http  (for network request)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ Screens
+- Home Screen
+   Features
+          - Home screen contains list of books with coverimage,title,author,published year and Read status
+          - Read status changes according to button click
+          - search icon is there in app bar
+          - when search icon is clicked, search bar opens in appbar in same screen
+          - movie title can be searched accordingly
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+  Api used
+  - Fetching list of books
+    "https://openlibrary.org/trending/now.json"
+    
+  - Searching books
+    "https://openlibrary.org/search.json?q=$bookName"
+
+ Sqlite Database
+ - Read status bool can be derived with the help of sqlite database.
+
