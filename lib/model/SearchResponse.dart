@@ -51,7 +51,6 @@ class Doc {
   List<String>? contributor;
   int? coverI;
   List<String>? ddc;
-  EbookAccess? ebookAccess;
   int? ebookCountI;
   int? editionCount;
   List<String>? editionKey;
@@ -62,7 +61,6 @@ class Doc {
   String? iaCollectionS;
   List<String>? isbn;
   String? key;
-  List<Language>? language;
   int? lastModifiedI;
   List<String>? lcc;
   List<String>? lccn;
@@ -124,7 +122,6 @@ class Doc {
     this.contributor,
     this.coverI,
     this.ddc,
-    this.ebookAccess,
     this.ebookCountI,
     this.editionCount,
     this.editionKey,
@@ -135,7 +132,6 @@ class Doc {
     this.iaCollectionS,
     this.isbn,
     this.key,
-    this.language,
     this.lastModifiedI,
     this.lcc,
     this.lccn,
@@ -198,7 +194,6 @@ class Doc {
     contributor: json["contributor"] == null ? [] : List<String>.from(json["contributor"]!.map((x) => x)),
     coverI: json["cover_i"],
     ddc: json["ddc"] == null ? [] : List<String>.from(json["ddc"]!.map((x) => x)),
-    ebookAccess: ebookAccessValues.map[json["ebook_access"]]!,
     ebookCountI: json["ebook_count_i"],
     editionCount: json["edition_count"],
     editionKey: json["edition_key"] == null ? [] : List<String>.from(json["edition_key"]!.map((x) => x)),
@@ -209,7 +204,6 @@ class Doc {
     iaCollectionS: json["ia_collection_s"],
     isbn: json["isbn"] == null ? [] : List<String>.from(json["isbn"]!.map((x) => x)),
     key: json["key"],
-    language: json["language"] == null ? [] : List<Language>.from(json["language"]!.map((x) => languageValues.map[x]!)),
     lastModifiedI: json["last_modified_i"],
     lcc: json["lcc"] == null ? [] : List<String>.from(json["lcc"]!.map((x) => x)),
     lccn: json["lccn"] == null ? [] : List<String>.from(json["lccn"]!.map((x) => x)),
@@ -224,7 +218,6 @@ class Doc {
     title: json["title"],
     titleSort: json["title_sort"],
     titleSuggest: json["title_suggest"],
-    type: typeValues.map[json["type"]]!,
     idAmazon: json["id_amazon"] == null ? [] : List<String>.from(json["id_amazon"]!.map((x) => x)),
     subject: json["subject"] == null ? [] : List<String>.from(json["subject"]!.map((x) => x)),
     place: json["place"] == null ? [] : List<String>.from(json["place"]!.map((x) => x)),
@@ -272,7 +265,6 @@ class Doc {
     "contributor": contributor == null ? [] : List<dynamic>.from(contributor!.map((x) => x)),
     "cover_i": coverI,
     "ddc": ddc == null ? [] : List<dynamic>.from(ddc!.map((x) => x)),
-    "ebook_access": ebookAccessValues.reverse[ebookAccess],
     "ebook_count_i": ebookCountI,
     "edition_count": editionCount,
     "edition_key": editionKey == null ? [] : List<dynamic>.from(editionKey!.map((x) => x)),
@@ -283,7 +275,6 @@ class Doc {
     "ia_collection_s": iaCollectionS,
     "isbn": isbn == null ? [] : List<dynamic>.from(isbn!.map((x) => x)),
     "key": key,
-    "language": language == null ? [] : List<dynamic>.from(language!.map((x) => languageValues.reverse[x])),
     "last_modified_i": lastModifiedI,
     "lcc": lcc == null ? [] : List<dynamic>.from(lcc!.map((x) => x)),
     "lccn": lccn == null ? [] : List<dynamic>.from(lccn!.map((x) => x)),
@@ -298,7 +289,6 @@ class Doc {
     "title": title,
     "title_sort": titleSort,
     "title_suggest": titleSuggest,
-    "type": typeValues.reverse[type],
     "id_amazon": idAmazon == null ? [] : List<dynamic>.from(idAmazon!.map((x) => x)),
     "subject": subject == null ? [] : List<dynamic>.from(subject!.map((x) => x)),
     "place": place == null ? [] : List<dynamic>.from(place!.map((x) => x)),
@@ -340,60 +330,5 @@ class Doc {
   };
 }
 
-enum EbookAccess {
-  BORROWABLE,
-  NO_EBOOK,
-  PRINTDISABLED,
-  PUBLIC,
-  UNCLASSIFIED
-}
 
-final ebookAccessValues = EnumValues({
-  "borrowable": EbookAccess.BORROWABLE,
-  "no_ebook": EbookAccess.NO_EBOOK,
-  "printdisabled": EbookAccess.PRINTDISABLED,
-  "public": EbookAccess.PUBLIC,
-  "unclassified": EbookAccess.UNCLASSIFIED
-});
 
-enum Language {
-  ALB,
-  ENG,
-  FRE,
-  NOB,
-  POR,
-  RUS,
-  SPA,
-  TUR
-}
-
-final languageValues = EnumValues({
-  "alb": Language.ALB,
-  "eng": Language.ENG,
-  "fre": Language.FRE,
-  "nob": Language.NOB,
-  "por": Language.POR,
-  "rus": Language.RUS,
-  "spa": Language.SPA,
-  "tur": Language.TUR
-});
-
-enum Type {
-  WORK
-}
-
-final typeValues = EnumValues({
-  "work": Type.WORK
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
-}

@@ -12,15 +12,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
+  final TextEditingController _textEditingController = TextEditingController();
   final bookCtrl = Get.put(BookController());
 
   @override
   void initState() {
-  //  bookCtrl.orderLoadData();
-
-    bookCtrl.fetchBookData().then((value) =>
-    {
-    });
+    bookCtrl.fetchBookData();
     super.initState();
   }
   @override
@@ -30,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           appBar: bookCtrl.showSearch.value
               ? AppBar(
+            backgroundColor: Colors.deepPurple,
             title: 
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 5),
@@ -37,11 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Expanded(
                         child: TextFormField(
+                          controller: _textEditingController,
                           key: bookCtrl.searchTextFieldKey,
-                          focusNode: bookCtrl.searchTextFieldFocusNode,
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          cursorColor: Colors.white,
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                          showCursor: false,
                           decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Colors.white54),
                             hintText: "Search Book",
                             border: InputBorder.none,
                           ),
@@ -54,42 +53,41 @@ class _HomeScreenState extends State<HomeScreen> {
                             if(value==""){
                               bookCtrl.isSearch.value= false;
                               setState(() {
-
                               });
                             }else{
                               bookCtrl.isSearch.value= true;
                              setState(() {
-
                              });
                             }
 
                           },
                         ),
                       ),
-                      IconButton(icon: Icon(Icons.search), onPressed: () {
-                        bookCtrl.searchBookData("the subtle art");
-                      },)
+                      IconButton(icon: Icon(Icons.search,color: Colors.white,), onPressed: bookCtrl.isSearch.value?() {
+
+                        bookCtrl.searchBookData(_textEditingController.text);
+                      }: null)
                     ],
                   ),
                 ),
               
              )
               : AppBar(
-            title: Text("Order"),
+            backgroundColor: Colors.deepPurple,
+            title: Text("Book Library",style: TextStyle(color: Colors.white),),
 
             actions: [
               IconButton(
                   onPressed: () {
                     bookCtrl.showSearch.value= true;
                     setState(() {
-
                     });
                   },
-                  icon: Icon(Icons.search)),
+                  icon: Icon(Icons.search,color: Colors.white,)),
 
             ],
           ),
-          body: bookCtrl.isSearch.value?  Column(
+          body: bookCtrl.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.deepPurple,)):bookCtrl.isSearch.value?Column(
             children: [
               Expanded(
                 child: ListView.builder(
@@ -111,10 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(bookCtrl.searchBook[index].title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,overflow: TextOverflow.ellipsis),),
                                     Text(bookCtrl.searchBook[index].author.replaceAll("[", "").replaceAll("]", "").replaceAll(";", ", ")),
                                     Text(bookCtrl.searchBook[index].publishedYear),
-                                    ElevatedButton(onPressed: (){}, child: Text("Unread",style: TextStyle(color: Colors.white)),style:  ElevatedButton.styleFrom(
-                                      primary: Colors.grey,
 
-                                    ),)
                                   ],
                                 ),
                               )
@@ -126,12 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ],
           ):
-          Column(
+          bookCtrl.isLoading.value?Center(child: CircularProgressIndicator(color: Colors.deepPurple,)):Column(
             children: [
               Expanded(
                 child: ListView.builder(
+
                   itemCount: bookCtrl.book.length,
                     itemBuilder: (BuildContext context, int index){
+                    bool btnColor= bookCtrl.book[index].readStatus;
                   return Card(
                     child: Container(
                       padding: EdgeInsets.symmetric(vertical: 5),
@@ -148,10 +145,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Text(bookCtrl.book[index].title,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,overflow: TextOverflow.ellipsis),),
                                 Text(bookCtrl.book[index].author.replaceAll("[", "").replaceAll("]", "").replaceAll(";", ", ")),
                                 Text(bookCtrl.book[index].publishedYear),
-                                ElevatedButton(onPressed: (){}, child: Text("Unread",style: TextStyle(color: Colors.white)),style:  ElevatedButton.styleFrom(
-                                  primary: Colors.grey,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: ElevatedButton(onPressed: (){
 
-                                ),)
+                                        bookCtrl.updateReadStatus(bookCtrl.book[index].id!);
+                                        bookCtrl.updateBool[index]= !bookCtrl.updateBool[index];
+                                      },
+                                        child: Text(bookCtrl.updateBool[index]?"Read":"Unread",style: TextStyle(color: Colors.white)),style:  ElevatedButton.styleFrom(
+                                        primary: bookCtrl.updateBool[index]?Colors.green:Colors.transparent,
+
+                                      ),),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           )

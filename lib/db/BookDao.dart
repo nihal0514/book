@@ -7,11 +7,8 @@ abstract class BooksDao {
   @Query('SELECT * FROM Book')
   Future<List<Book>> findAllBooks();
 
-  @Query('SELECT name FROM Book')
-  Stream<List<String>> findAllBookName();
-
-  @Query('SELECT * FROM Book WHERE id = :id')
-  Stream<Book?> findBookById(int id);
+  @Query("UPDATE Book SET readStatus = CASE WHEN readStatus = 1 THEN 0 ELSE 1 END WHERE id = :id")
+  Future<void> updateReadStatus(int id);
 
   @insert
   Future<void> insertBook(Book book);

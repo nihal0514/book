@@ -121,7 +121,6 @@ class Work {
 }
 
 class Availability {
-  Status? status;
   bool? availableToBrowse;
   bool? availableToBorrow;
   bool? availableToWaitlist;
@@ -139,11 +138,9 @@ class Availability {
   DateTime? lastWaitlistDate;
   bool? isRestricted;
   bool? isBrowseable;
-  Src? src;
   String? errorMessage;
 
   Availability({
-    this.status,
     this.availableToBrowse,
     this.availableToBorrow,
     this.availableToWaitlist,
@@ -161,12 +158,10 @@ class Availability {
     this.lastWaitlistDate,
     this.isRestricted,
     this.isBrowseable,
-    this.src,
     this.errorMessage,
   });
 
   factory Availability.fromJson(Map<String, dynamic> json) => Availability(
-    status: statusValues.map[json["status"]]!,
     availableToBrowse: json["available_to_browse"],
     availableToBorrow: json["available_to_borrow"],
     availableToWaitlist: json["available_to_waitlist"],
@@ -184,12 +179,10 @@ class Availability {
     lastWaitlistDate: json["last_waitlist_date"] == null ? null : DateTime.parse(json["last_waitlist_date"]),
     isRestricted: json["is_restricted"],
     isBrowseable: json["is_browseable"],
-    src: srcValues.map[json["__src__"]]!,
     errorMessage: json["error_message"],
   );
 
   Map<String, dynamic> toJson() => {
-    "status": statusValues.reverse[status],
     "available_to_browse": availableToBrowse,
     "available_to_borrow": availableToBorrow,
     "available_to_waitlist": availableToWaitlist,
@@ -207,41 +200,6 @@ class Availability {
     "last_waitlist_date": lastWaitlistDate?.toIso8601String(),
     "is_restricted": isRestricted,
     "is_browseable": isBrowseable,
-    "__src__": srcValues.reverse[src],
     "error_message": errorMessage,
   };
-}
-
-enum Src {
-  CORE_MODELS_LENDING_GET_AVAILABILITY
-}
-
-final srcValues = EnumValues({
-  "core.models.lending.get_availability": Src.CORE_MODELS_LENDING_GET_AVAILABILITY
-});
-
-enum Status {
-  BORROW_AVAILABLE,
-  ERROR,
-  OPEN,
-  PRIVATE
-}
-
-final statusValues = EnumValues({
-  "borrow_available": Status.BORROW_AVAILABLE,
-  "error": Status.ERROR,
-  "open": Status.OPEN,
-  "private": Status.PRIVATE
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

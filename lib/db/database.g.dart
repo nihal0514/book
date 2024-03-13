@@ -103,7 +103,7 @@ class _$BooksDao extends BooksDao {
   _$BooksDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database, changeListener),
+  )   : _queryAdapter = QueryAdapter(database),
         _bookInsertionAdapter = InsertionAdapter(
             database,
             'Book',
@@ -114,8 +114,7 @@ class _$BooksDao extends BooksDao {
                   'author': item.author,
                   'publishedYear': item.publishedYear,
                   'readStatus': item.readStatus ? 1 : 0
-                },
-            changeListener);
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -138,26 +137,10 @@ class _$BooksDao extends BooksDao {
   }
 
   @override
-  Stream<List<String>> findAllBookName() {
-    return _queryAdapter.queryListStream('SELECT name FROM Book',
-        mapper: (Map<String, Object?> row) => row.values.first as String,
-        queryableName: 'Book',
-        isView: false);
-  }
-
-  @override
-  Stream<Book?> findBookById(int id) {
-    return _queryAdapter.queryStream('SELECT * FROM Book WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Book(
-            row['id'] as int?,
-            row['title'] as String,
-            row['cover'] as String,
-            row['author'] as String,
-            row['publishedYear'] as String,
-            (row['readStatus'] as int) != 0),
-        arguments: [id],
-        queryableName: 'Book',
-        isView: false);
+  Future<void> updateReadStatus(int id) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE Book SET readStatus = CASE WHEN readStatus = 1 THEN 0 ELSE 1 END WHERE id = ?1',
+        arguments: [id]);
   }
 
   @override
